@@ -1,0 +1,15 @@
+
+------------------------------------------------------------
+Gradle 8.13
+------------------------------------------------------------
+
+Build time:    2025-02-25 09:22:14 UTC
+Revision:      073314332697ba45c16c0a0ce1891fa6794179ff
+
+Kotlin:        2.0.21
+Groovy:        3.0.22
+Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024
+Launcher JVM:  25 (Eclipse Adoptium 25+36-LTS)
+Daemon JVM:    C:\Users\goura\AppData\Local\Programs\Eclipse Adoptium\jdk-25.0.0.36-hotspot (no JDK specified, using current Java home)
+OS:            Windows 11 10.0 amd64
+
