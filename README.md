@@ -243,10 +243,6 @@ app/src/main/java/com/quotevault/
 - `VIBRATE` - Haptic feedback for radial menu
 - `SCHEDULE_EXACT_ALARM` - Precise notification scheduling
 
-## 🤖 AI Assistance
-- **Google Stitch**: UI research and prototyping
-
-
 ## ⚠️ Known Limitations
 - **Offline Mode**: App requires internet for initial data load
 - **Widget Sync**: Updates via WorkManager or immediately on app launch
