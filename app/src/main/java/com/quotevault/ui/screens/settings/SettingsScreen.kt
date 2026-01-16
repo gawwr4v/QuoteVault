@@ -129,7 +129,6 @@ fun SettingsScreen(
 
             // general section
             SettingsSection(title = "General") {
-                // Notification Mode
                 // Notification Settings
                 SettingsItem(
                     icon = Icons.Default.Notifications,
@@ -338,12 +337,14 @@ fun NotificationSettingsDialog(
                             ) {
                                 val request = androidx.work.OneTimeWorkRequestBuilder<com.quotevault.worker.DailyQuoteWorker>().build()
                                 androidx.work.WorkManager.getInstance(context).enqueue(request)
+                                android.widget.Toast.makeText(context, "Notification triggered! Check shade in ~5s", android.widget.Toast.LENGTH_SHORT).show()
                             } else {
-                                // Simple toast or ignore in dialog test for now, usually permission requested elsewhere
+                                android.widget.Toast.makeText(context, "Notification permission missing", android.widget.Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             val request = androidx.work.OneTimeWorkRequestBuilder<com.quotevault.worker.DailyQuoteWorker>().build()
                             androidx.work.WorkManager.getInstance(context).enqueue(request)
+                            android.widget.Toast.makeText(context, "Notification triggered! Check shade in ~5s", android.widget.Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),

@@ -9,10 +9,13 @@ import androidx.navigation.NavBackStackEntry
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import com.quotevault.ui.screens.search.SearchScreen
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +42,8 @@ import com.quotevault.ui.screens.splash.SplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.fillMaxSize
+import com.quotevault.ui.components.RadialMenuOverlay
 import com.quotevault.ui.screens.favorites.CollectionDetailScreen
 import com.quotevault.ui.screens.collections.CollectionsScreen
 import com.quotevault.ui.screens.home.HomeScreen
@@ -48,6 +53,7 @@ import com.quotevault.ui.screens.account.AccountManagementScreen
 
 sealed class Screen(val route: String, val title: String, val selectedIcon: ImageVector, val unselectedIcon: ImageVector) {
     object Home : Screen("home", "Home", Icons.Filled.Home, Icons.Outlined.Home)
+    object Search : Screen("search", "Search", Icons.Filled.Search, Icons.Outlined.Search)
     object Library : Screen("collections", "Collections", Icons.Filled.List, Icons.Outlined.List)
     object Profile : Screen("profile", "Profile", Icons.Filled.Person, Icons.Outlined.Person)
 }
@@ -61,10 +67,12 @@ fun QuoteVaultNavGraph(
     val currentDestination = navBackStackEntry?.destination
 
     // Define screens that should show the bottom bar
-    val bottomBarRoutes = listOf(Screen.Home.route, Screen.Library.route, Screen.Profile.route)
+    val bottomBarRoutes = listOf(Screen.Home.route, Screen.Search.route, Screen.Library.route, Screen.Profile.route)
     val shouldShowBottomBar = currentDestination?.route in bottomBarRoutes
 
-    Scaffold(
+    // Wrap everything in a Box so RadialMenuOverlay can appear on top of ALL UI
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
         bottomBar = {
             androidx.compose.animation.AnimatedVisibility(
                 visible = shouldShowBottomBar,
@@ -75,7 +83,7 @@ fun QuoteVaultNavGraph(
                     containerColor = MaterialTheme.colorScheme.surface,
                     tonalElevation = 8.dp
                 ) {
-                    val items = listOf(Screen.Home, Screen.Library, Screen.Profile)
+                    val items = listOf(Screen.Home, Screen.Search, Screen.Library, Screen.Profile)
                     items.forEach { screen ->
                         val isSelected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
                         NavigationBarItem(
@@ -121,6 +129,7 @@ fun QuoteVaultNavGraph(
         // We should NOT apply top padding here if the inner screens utilize Scaffold with TopBar.
         Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(bottom = innerPadding.calculateBottomPadding()) 
         ) {
             val authState by authViewModel.uiState.collectAsState()
@@ -198,6 +207,13 @@ fun QuoteVaultNavGraph(
                     )
                 }
 
+                composable(Screen.Search.route) {
+                    SearchScreen(
+                        onNavigateToDetail = { /* TODO: Detail view */ },
+                        onNavigateToShare = { quoteId -> navController.navigate("share/$quoteId") }
+                    )
+                }
+
                 composable(Screen.Library.route) {
                     CollectionsScreen(
                         onNavigateToCollection = { collectionId -> navController.navigate("collection/$collectionId") }
@@ -271,7 +287,11 @@ fun QuoteVaultNavGraph(
                         }
                     )
                 }
+                }
             }
-        }
-    }
+        }  // End Scaffold content lambda and Scaffold itself
+        
+        // Radial Menu Overlay - renders on top of ALL content including bottom nav
+        RadialMenuOverlay()
+    }  // End outer wrapper Box
 }

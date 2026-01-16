@@ -81,7 +81,7 @@ class QuoteViewModel @Inject constructor(
             if (result.isSuccess) {
                 val fetchedQuotes = result.getOrDefault(emptyList())
                 // Shuffle if refreshing main feed to give a random feel
-                val newQuotes = if (reset && currentState.searchQuery.isBlank() && currentState.selectedCategory == null && currentState.selectedAuthor == null) {
+                val newQuotes = if (reset && currentState.isShuffleActive) {
                     fetchedQuotes.shuffled() 
                 } else {
                     fetchedQuotes
@@ -189,7 +189,19 @@ class QuoteViewModel @Inject constructor(
 
     fun onAuthorSelected(author: String?) {
         val newAuthor = if (_uiState.value.selectedAuthor == author) null else author
-        _uiState.update { it.copy(selectedAuthor = newAuthor, selectedCategory = null) } // Clear category if author selected? Or allow both? Let's clear to avoid empty results for now
+        _uiState.update { it.copy(selectedAuthor = newAuthor, selectedCategory = null, isShuffleActive = false) } // Disable shuffle
+        loadQuotes(reset = true)
+    }
+
+    fun onShuffleClicked() {
+        val isActive = !_uiState.value.isShuffleActive
+        if (isActive) {
+            // Activate Shuffle: Clear other filters
+            _uiState.update { it.copy(isShuffleActive = true, selectedCategory = null, selectedAuthor = null, searchQuery = "") }
+        } else {
+            // Deactivate: just turn off flag, load normal
+            _uiState.update { it.copy(isShuffleActive = false) }
+        }
         loadQuotes(reset = true)
     }
 
@@ -285,6 +297,7 @@ data class HomeUiState(
     val error: String? = null,
     val searchQuery: String = "",
     val selectedCategory: String? = null,
+    val isShuffleActive: Boolean = true, // Default to true!
     val page: Int = 1,
     val endReached: Boolean = false,
     val userCollections: List<com.quotevault.domain.model.QuoteCollection> = emptyList(),

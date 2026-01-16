@@ -77,6 +77,22 @@ fun QuoteVaultTheme(
         androidx.compose.ui.unit.Density(currentDensity.density, fontScale = fontScale)
     }
 
+    // System UI Controller logic
+    val context = LocalContext.current
+    val view = androidx.compose.ui.platform.LocalView.current
+    if (!view.isInEditMode) {
+        androidx.compose.runtime.SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
+            window.navigationBarColor = android.graphics.Color.TRANSPARENT
+            
+            // Use WindowInsetsControllerCompat to toggle light/dark icons
+            val insetsController = androidx.core.view.WindowCompat.getInsetsController(window, view)
+            insetsController.isAppearanceLightStatusBars = !darkTheme // Dark Theme -> Light Icons (false), Light Theme -> Dark Icons (true)
+            insetsController.isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
+
     androidx.compose.runtime.CompositionLocalProvider(
         androidx.compose.ui.platform.LocalDensity provides customDensity
     ) {

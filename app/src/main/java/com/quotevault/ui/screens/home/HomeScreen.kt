@@ -103,30 +103,33 @@ fun HomeScreen(
             title = { Text("Add to Collection") },
             text = {
                 Column {
-                    Text("Select a collection:", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LazyColumn(modifier = Modifier.heightIn(max = 200.dp)) {
-                        items(uiState.userCollections) { collection ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        viewModel.addQuoteToCollection(collection.id, selectedQuoteForCollection!!.id)
-                                        showCollectionDialog = false
-                                    }
-                                    .padding(vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.primary)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(collection.name, color = MaterialTheme.colorScheme.onSurface)
+                    if (uiState.userCollections.isNotEmpty()) {
+                        Text("Select a collection:", style = MaterialTheme.typography.titleMedium)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        LazyColumn(modifier = Modifier.heightIn(max = 200.dp)) {
+                            items(uiState.userCollections) { collection ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            viewModel.addQuoteToCollection(collection.id, selectedQuoteForCollection!!.id)
+                                            showCollectionDialog = false
+                                        }
+                                        .padding(vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.primary)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(collection.name, color = MaterialTheme.colorScheme.onSurface)
+                                }
                             }
                         }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Create new collection:", style = MaterialTheme.typography.titleMedium)
+                    
+                    Text(if (uiState.userCollections.isEmpty()) "Create your first collection:" else "Create new collection:", style = MaterialTheme.typography.titleMedium)
                     OutlinedTextField(
                         value = newCollectionName,
                         onValueChange = { newCollectionName = it },
@@ -244,6 +247,7 @@ fun HomeScreen(
         },
         onRefresh = { viewModel.loadQuotes(reset = true) },
         onFilterClick = { showFilterDialog = true },
+        onShuffleClick = viewModel::onShuffleClicked,
         avatarUrl = userProfile?.avatarUrl
     )
 }
@@ -261,6 +265,7 @@ fun HomeScreenContent(
     onShareClick: (Quote) -> Unit,
     onRefresh: () -> Unit,
     onFilterClick: () -> Unit,
+    onShuffleClick: () -> Unit, // Add callback
     avatarUrl: String? = null
 ) {
     Scaffold(
@@ -277,13 +282,6 @@ fun HomeScreenContent(
                     onProfileClick = onProfileClick,
                     avatarUrl = avatarUrl
                 )
-                // search ui component used in the top bar (keywords: search ui, search bar)
-                QuoteSearchBar(
-                    query = uiState.searchQuery,
-                    onQueryChange = onQueryChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    onFilterClick = onFilterClick
-                )
             }
         }
     ) { innerPadding ->
@@ -297,6 +295,8 @@ fun HomeScreenContent(
                 categories = uiState.categories,
                 selectedCategory = uiState.selectedCategory,
                 onCategorySelected = onCategorySelected,
+                isShuffleActive = uiState.isShuffleActive, // Pass state
+                onShuffleClick = onShuffleClick,           // Pass callback
                 modifier = Modifier.fillMaxWidth()
             )
             
@@ -341,7 +341,7 @@ fun HomeScreenContent(
                                         onItemClick = { /* Detail view */ },
                                         onShareClick = { onShareClick(uiState.dailyQuote) },
                                         onAddToCollectionClick = { onAddToCollectionClick(uiState.dailyQuote) },
-                                        style = QuoteCardStyle.Featured
+                                        style = QuoteCardStyle.Detailed
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
@@ -350,19 +350,14 @@ fun HomeScreenContent(
                         }
 
                         items(uiState.quotes) { quote ->
-                             val style = when (quote.id.hashCode() % 3) {
-                                 0 -> QuoteCardStyle.Minimal
-                                 1 -> QuoteCardStyle.Typography
-                                 else -> QuoteCardStyle.Featured
-                             }
-    
                             QuoteCard(
+                                modifier = Modifier.padding(vertical = 4.dp), // add subtle spacing
                                 quote = quote,
                                 onFavoriteClick = { onFavoriteClick(quote) },
                                 onItemClick = { /* Detail view if needed */ },
                                 onShareClick = { onShareClick(quote) },
                                 onAddToCollectionClick = { onAddToCollectionClick(quote) },
-                                style = style
+                                style = QuoteCardStyle.Standard
                             )
                         }
                         

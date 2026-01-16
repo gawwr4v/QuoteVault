@@ -438,7 +438,7 @@ fun CollectionDetailScreen(
                                             selectedQuoteForCollection = quote
                                             showCollectionDialog = true
                                         },
-                                        style = QuoteCardStyle.Minimal,
+                                        style = QuoteCardStyle.Standard,
                                         isSaved = homeUiState.savedQuoteIds.contains(quote.id)
                                     )
                                     

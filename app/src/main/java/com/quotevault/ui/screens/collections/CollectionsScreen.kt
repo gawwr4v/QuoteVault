@@ -60,9 +60,9 @@ fun CollectionsScreen(
              Column(
                  modifier = Modifier
                      .fillMaxWidth()
-                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
+                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.95f)) // Slightly higher opacity
                      .statusBarsPadding()
-                     .padding(top = 24.dp, bottom = 16.dp, start = 24.dp, end = 24.dp)
+                     .padding(top = 16.dp, bottom = 12.dp, start = 24.dp, end = 24.dp) // Tighter padding
              ) {
                  Text(
                      text = "Collections",
@@ -80,7 +80,7 @@ fun CollectionsScreen(
             if (uiState.error != null) {
                 Surface(
                     color = MaterialTheme.colorScheme.errorContainer,
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
@@ -99,42 +99,41 @@ fun CollectionsScreen(
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp, start = 16.dp, end = 16.dp), // Fix content padding, ensure FAB space
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                // Liked Card (Always present)
-                item {
-                    CollectionCard(
-                        name = "Liked",
-                        count = null,
-                        icon = Icons.Default.Favorite,
-                        colorStart = Color(0xFFFF512F),
-                        colorEnd = Color(0xFFDD2476),
-                        onClick = { onNavigateToCollection("favorites") }
-                    )
-                }
-    
-                if (uiState.isLoading && uiState.userCollections.isEmpty()) {
+                    // Liked Card (Always present)
                     item {
-                        Box(Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                        }
-                    }
-                } else {
-                    items(uiState.userCollections) { collection ->
                         CollectionCard(
-                            name = collection.name,
-                            description = collection.description,
-                            count = null, 
-                            icon = Icons.Default.LightMode,
-                            colorStart = Color(0xFF6366F1),
-                            colorEnd = Color(0xFFD946EF),
-                            onClick = { onNavigateToCollection(collection.id) },
-                            onLongClick = { collectionToDelete = collection }
+                            name = "Liked",
+                            count = null,
+                            icon = Icons.Default.Favorite,
+                            colorStart = Color(0xFFFF512F),
+                            colorEnd = Color(0xFFDD2476),
+                            onClick = { onNavigateToCollection("favorites") }
                         )
                     }
-                }
-                item { Spacer(modifier = Modifier.height(80.dp)) } // Space for FAB
+        
+                    if (uiState.isLoading && uiState.userCollections.isEmpty()) {
+                        item {
+                            Box(Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                            }
+                        }
+                    } else {
+                        items(uiState.userCollections) { collection ->
+                            CollectionCard(
+                                name = collection.name,
+                                description = collection.description,
+                                count = null, 
+                                icon = Icons.Default.LightMode,
+                                colorStart = Color(0xFF6366F1),
+                                colorEnd = Color(0xFFD946EF),
+                                onClick = { onNavigateToCollection(collection.id) },
+                                onLongClick = { collectionToDelete = collection }
+                            )
+                        }
+                    }
                 }
             }
         }

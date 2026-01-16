@@ -141,13 +141,45 @@ fun CategoryChips(
     categories: List<String>,
     selectedCategory: String?,
     onCategorySelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isShuffleActive: Boolean = false,
+    onShuffleClick: () -> Unit = {}
 ) {
     LazyRow(
         modifier = modifier.padding(vertical = 12.dp),
         contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // Shuffle Filter
+        item {
+            Surface(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .clickable { onShuffleClick() },
+                color = if (isShuffleActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                border = if (isShuffleActive) null else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)),
+                shape = RoundedCornerShape(50)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FilterList, // Using FilterList or similar as Shuffle icon not standard in Default
+                        contentDescription = "Shuffle",
+                        tint = if (isShuffleActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Shuffle",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = if (isShuffleActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+        
         items(categories) { category ->
             val isSelected = category == selectedCategory
             

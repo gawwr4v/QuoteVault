@@ -2,31 +2,75 @@
 
 QuoteVault is a modern Android application for discovering, saving, and sharing quotes, built with Jetpack Compose and Supabase.
 
-## � Screenshots
-<!-- Paste your screenshots here. Example format: -->
+## ✨ Features
+
+### Core Features
+- **Authentication**: Email/password sign up, login, logout, password reset
+- **Quote Browsing**: Infinite scroll feed, category filtering (Motivation, Love, Success, Wisdom, Humor, Life)
+- **Search**: Full-text search by quote content or author
+- **Favorites**: Save quotes with cloud sync across devices
+- **Collections**: Create custom collections to organize quotes
+- **Daily Quote Widget**: Home screen widget with daily inspiration
+- **Push Notifications**: Configurable daily quote notifications
+
+### Sharing & Export
+- Share quotes as text via system share sheet
+- Generate beautiful quote cards with 3 template styles (Minimal, Bold, Artistic)
+- Save quote cards as images to device
+
+### Personalization
+- Dark/Light mode with system default option
+- Multiple accent color themes
+- Adjustable quote text size
+- All settings sync to user profile
+
+## 📱 Screenshots
+<!-- Add your screenshots here -->
 <!-- <img src="screenshots/home.png" width="250" /> -->
 
-## �🛠 Setup Instructions
+## 🛠 Setup Instructions
 
 ### Prerequisites
-*   Android Studio (Koala or newer recommended)
-*   JDK 17
-*   Supabase Account
+- **Android Studio**: Koala (2024.1.1) or newer
+- **JDK**: 17 or higher
+- **Minimum SDK**: Android 10 (API 29)
+- **Supabase Account**: Free tier works
+
+### Clone & Open
+```bash
+git clone https://github.com/gawwr4v/QuoteVault.git
+cd QuoteVault
+# Open in Android Studio
+```
 
 ### API Configuration
 This project uses `BuildConfig` to secure sensitive API keys. **Do not commit your real keys to version control.**
 
-1.  Open the `local.properties` file in the project root (this file is git-ignored).
-2.  Add your Supabase credentials:
-    ```properties
-    SUPABASE_URL="https://<YOUR_PROJECT_ID>.supabase.co"
-    SUPABASE_KEY="<YOUR_ANON_KEY>"
-    ```
-3.  **Sync Project**: Click "Sync Project with Gradle Files" in Android Studio.
+1. Open `local.properties` in the project root (git-ignored by default)
+2. Add your Supabase credentials:
+   ```properties
+   SUPABASE_URL="https://<YOUR_PROJECT_ID>.supabase.co"
+   SUPABASE_KEY="<YOUR_ANON_KEY>"
+   ```
+3. Click **"Sync Project with Gradle Files"** in Android Studio
+
+### Build & Run
+```bash
+# Build debug APK
+./gradlew assembleDebug
+
+# Install on connected device
+./gradlew installDebug
+
+# Run all tests
+./gradlew test
+```
+
+Or simply press ▶️ **Run** in Android Studio.
 
 ## 🗄️ Backend Schema (Supabase)
 
-This app relies on the following PostgreSQL structure. You can run this SQL script directly in the Supabase SQL Editor to set up your database.
+Run this SQL script in the Supabase SQL Editor to set up your database:
 
 ```sql
 -- 1. Enable UUID Extension
@@ -72,22 +116,18 @@ create table public.list_quotes (
 
 -- === Row Level Security (RLS) Policies ===
 
--- Enable RLS
 alter table favorites enable row level security;
 alter table lists enable row level security;
 alter table list_quotes enable row level security;
 
--- Favorites: Users can only see/edit their own favorites
 create policy "favorites_select" on favorites for select using (auth.uid() = user_id);
 create policy "favorites_insert" on favorites for insert with check (auth.uid() = user_id);
 create policy "favorites_delete" on favorites for delete using (auth.uid() = user_id);
 
--- Lists: Users can only see/edit their own lists
 create policy "lists_all" on lists for all
 using (auth.uid() = user_id)
 with check (auth.uid() = user_id);
 
--- List Quotes: Access granted if user owns the parent list
 create policy "list_quotes_all" on list_quotes for all
 using (
   exists (
@@ -100,34 +140,61 @@ using (
 -- === Initial Data ===
 insert into categories (name) values 
 ('Motivation'), ('Love'), ('Success'), ('Wisdom'), ('Humor'), ('Life');
-
--- Update any existing quotes with timestamps
-UPDATE public.quotes SET created_at = now() WHERE created_at IS NULL;
 ```
 
-## 🚀 Coding Approach & Workflow
+### Seeding Quotes
+Seed your database with 100+ quotes across categories. You can use any public quote API or dataset.
 
-### Architecture
-We follow **Modern Android Development (MAD)** practices:
-*   **MVVM (Model-View-ViewModel)**: Ensures clear separation between UI and business logic.
-*   **Clean Architecture**: Divided into three distinct layers:
-    *   **Data Layer**: Repositories, Supabase Data Source, DataStore/SharedPreferences.
-    *   **Domain Layer**: Use cases and data models.
-    *   **UI Layer**: Jetpack Compose screens and state holders.
-*   **Dependency Injection**: Hilt (Dagger) for managing dependencies.
+## 🏗 Architecture
 
-### Technical Highlights
-*   **Declarative UI**: 100% Jetpack Compose with Material 3 Design.
-*   **Reactive Data**: Built on Kotlin Coroutines and StateFlow.
-*   **Widget Integration**: Uses Jetpack Glance for a modern, responsive home screen widget.
-*   **Secure Config**: API credentials secured via `local.properties` and `BuildConfig`.
+### Modern Android Development (MAD)
+- **MVVM**: Clear separation between UI and business logic
+- **Clean Architecture**: Three distinct layers:
+  - **Data Layer**: Repositories, Supabase Data Source, DataStore
+  - **Domain Layer**: Use cases and data models
+  - **UI Layer**: Jetpack Compose screens and ViewModels
+- **Dependency Injection**: Hilt (Dagger)
 
-## 🤖 AI Tools Used
-*   **Google Stitch**: Used for UI generation and prototyping.
+### Project Structure
+```
+app/src/main/java/com/quotevault/
+├── data/               # Repositories, data sources
+├── di/                 # Hilt modules
+├── domain/             # Models, repository interfaces
+├── ui/
+│   ├── components/     # Reusable Compose components
+│   ├── navigation/     # NavGraph, Screen routes
+│   ├── screens/        # Feature screens (auth, home, search, etc.)
+│   └── theme/          # Colors, Typography, Theme
+├── widget/             # Home screen Glance widget
+├── worker/             # WorkManager for notifications
+└── MainActivity.kt
+```
 
-## 🎨 Design Reference
-*   **Designs**: <!-- Add your design link here -->
+### Technical Stack
+- **Language**: Kotlin 100%
+- **UI Framework**: Jetpack Compose (Material 3)
+- **Dependency Injection**: Hilt
+- **Backend & Auth**: Supabase (GoTrue, Postgrest)
+- **Network**: Ktor Client
+- **Image Loading**: Coil
+- **Local Storage**: DataStore Preferences
+- **Background Tasks**: WorkManager
+- **Widgets**: Jetpack Glance
+- **Architecture**: Clean Architecture + MVVM
+
+## 📋 Permissions
+- `INTERNET` - API calls to Supabase
+- `POST_NOTIFICATIONS` - Daily quote notifications (Android 13+)
+- `VIBRATE` - Haptic feedback for radial menu
+- `SCHEDULE_EXACT_ALARM` - Precise notification scheduling
+
+## 🤖 AI Assistance
+built with the assistance of **Google Antigravity**.
 
 ## ⚠️ Known Limitations
-*   **Backend Tables**: The `public.profiles` table currently handles user data gracefully via fallback to `Auth User Metadata`.
-*   **Widget Sync**: The widget updates via background work (WorkManager) or immediately upon app launch.
+- **Offline Mode**: App requires internet for initial data load
+- **Widget Sync**: Updates via WorkManager or immediately on app launch
+
+## 📄 License
+MIT License - See [LICENSE](LICENSE) for details.

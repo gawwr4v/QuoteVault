@@ -1,3 +1,105 @@
 <resources>
     <string name="app_name">QuoteVault</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_collections">Collections</string>
+    <string name="nav_profile">Profile</string>
+    
+    <!-- Home Screen -->
+    <string name="quote_of_the_day">Quote of the Day</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="filter">Filter</string>
+    <string name="pull_to_refresh">Pull to refresh</string>
+    <string name="unknown_author">Unknown</string>
+    
+    <!-- Search -->
+    <string name="search_placeholder">Search quotes, authors…</string>
+    <string name="discover_quotes">Discover Quotes</string>
+    <string name="type_to_search">Type to search by text or author</string>
+    <string name="no_results_for">No results found for "%1$s"</string>
+    <string name="clear">Clear</string>
+    
+    <!-- Collections -->
+    <string name="favorites">Favorites</string>
+    <string name="all_quotes">All Quotes</string>
+    <string name="create_collection">Create Collection</string>
+    <string name="add_to_collection">Add to Collection</string>
+    <string name="remove_from_collection">Remove from Collection</string>
+    <string name="collection_name">Collection Name</string>
+    <string name="collection_description">Description (optional)</string>
+    <string name="delete_collection">Delete Collection</string>
+    <string name="quotes_count">%1$d quotes</string>
+    
+    <!-- Share -->
+    <string name="share_quote">Share Quote</string>
+    <string name="save_image">Save Image</string>
+    <string name="share">Share</string>
+    <string name="select_template">Select Template</string>
+    <string name="minimal">Minimal</string>
+    <string name="bold">Bold</string>
+    <string name="artistic">Artistic</string>
+    <string name="image_saved">Image saved!</string>
+    
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme">Theme</string>
+    <string name="accent_color">Accent Color</string>
+    <string name="text_size">Text Size</string>
+    <string name="notifications">Notifications</string>
+    <string name="daily_quote_notifications">Daily Quote Notifications</string>
+    <string name="notification_time">Notification Time</string>
+    <string name="account">Account</string>
+    <string name="logout">Logout</string>
+    <string name="about">About</string>
+    <string name="version">Version %1$s</string>
+    
+    <!-- Theme options -->
+    <string name="theme_system">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="have_account">Already have an account?</string>
+    <string name="password_reset_sent">Password reset email sent!</string>
+    
+    <!-- Account Management -->
+    <string name="account_management">Account Management</string>
+    <string name="change_username">Change Username</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Radial Menu Actions -->
+    <string name="like">Like</string>
+    <string name="collect">Add to Collection</string>
+    
+    <!-- Notifications -->
+    <string name="daily_quote_channel">Daily Quote</string>
+    <string name="quote_notification_title">Quote of the Day</string>
+    <string name="time_for_inspiration">Time for your daily inspiration!</string>
+    
+    <!-- Widget -->
+    <string name="widget_name">Quote Widget</string>
+    <string name="widget_description">Displays the quote of the day</string>
+    <string name="open_app_to_fetch">Open App to fetch Quote</string>
+    
+    <!-- General -->
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="loading">Loading…</string>
+    <string name="retry">Retry</string>
+    <string name="empty_state">No items found</string>
 </resources>
