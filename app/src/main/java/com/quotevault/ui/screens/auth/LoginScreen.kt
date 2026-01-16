@@ -32,9 +32,11 @@ import com.quotevault.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    uiState: AuthUiState,
     onLoginClick: (String, String) -> Unit,
     onSignUpClick: () -> Unit,
     onResetPasswordClick: (String) -> Unit,
+    showVerificationMessage: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     var email by remember { mutableStateOf("") }
@@ -138,6 +140,42 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
+                // Verification Message
+                if (showVerificationMessage) {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Email,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "Please check your email to verify your account before logging in.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+
+                // Error Message
+                if (uiState is AuthUiState.Error) {
+                    Text(
+                        text = uiState.message,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
                 // Email
                 AuthTextField(
                     value = email,
@@ -181,6 +219,7 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
+                    enabled = uiState !is AuthUiState.Loading,
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -191,11 +230,19 @@ fun LoginScreen(
                         pressedElevation = 2.dp
                     )
                 ) {
-                    Text(
-                        text = "Sign In",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        letterSpacing = 0.5.sp
-                    )
+                     if (uiState is AuthUiState.Loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = "Sign In",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            letterSpacing = 0.5.sp
+                        )
+                    }
                 }
             }
 
@@ -345,6 +392,12 @@ fun AuthTextField(
 @Composable
 fun LoginScreenPreview() {
     QuoteVaultTheme {
-        LoginScreen(onLoginClick = { _, _ -> }, onSignUpClick = {}, onResetPasswordClick = {})
+        LoginScreen(
+            uiState = AuthUiState.Idle,
+            onLoginClick = { _, _ -> },
+            onSignUpClick = {},
+            onResetPasswordClick = {},
+            showVerificationMessage = true
+        )
     }
 }

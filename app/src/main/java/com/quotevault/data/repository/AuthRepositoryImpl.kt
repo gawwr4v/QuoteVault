@@ -95,7 +95,11 @@ class AuthRepositoryImpl @Inject constructor(
             Result.success(Unit)
         } catch (e: Exception) {
             android.util.Log.e("AuthRepo", "signIn failed", e)
-            Result.failure(e)
+            if (e.message?.contains("Invalid login credentials", ignoreCase = true) == true) {
+                Result.failure(Exception("Login failed. Please verify your email or check your password."))
+            } else {
+                Result.failure(e)
+            }
         }
     }
 

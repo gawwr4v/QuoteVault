@@ -19,12 +19,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSupabaseClient(): SupabaseClient {
+    fun provideSupabaseClient(
+        @dagger.hilt.android.qualifiers.ApplicationContext context: android.content.Context
+    ): SupabaseClient {
         return createSupabaseClient(
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_KEY
         ) {
-            install(Auth)
+            install(Auth) {
+                sessionManager = com.quotevault.data.auth.SharedPreferencesSessionManager(context)
+            }
             install(Postgrest)
             defaultSerializer = KotlinXSerializer(Json {
                 ignoreUnknownKeys = true

@@ -28,7 +28,8 @@ import com.quotevault.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
-    onSignUpClick: (String, String) -> Unit,
+    uiState: AuthUiState,
+    onSignUpClick: (String, String, String) -> Unit,
     onBackClick: () -> Unit,
     onSignInClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -36,9 +37,11 @@ fun SignUpScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var fullName by remember { mutableStateOf("") }
     
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = modifier
@@ -106,14 +109,42 @@ fun SignUpScreen(
             text = "Sign up to start curating your daily inspiration.",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 40.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
+
+        // Error Message from ViewModel
+        if (uiState is AuthUiState.Error) {
+             Text(
+                text = uiState.message,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+        
+        // Local Password Error
+        if (passwordError != null) {
+             Text(
+                text = passwordError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
 
         // Form
         Column(
             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+            // Full Name
+            AuthGlassInput(
+                value = fullName,
+                onValueChange = { fullName = it },
+                label = "Full Name",
+                placeholder = "John Doe"
+            )
+
             // Email
             AuthGlassInput(
                 value = email,
@@ -175,11 +206,21 @@ fun SignUpScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
-                onClick = { onSignUpClick(email, password) },
+                onClick = { 
+                    if (password != confirmPassword) {
+                        passwordError = "Passwords do not match"
+                    } else if (password.length < 6) {
+                        passwordError = "Password must be at least 6 characters"
+                    } else {
+                        passwordError = null
+                        onSignUpClick(email, password, fullName) 
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(12.dp),
+                enabled = uiState !is AuthUiState.Loading,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -189,10 +230,18 @@ fun SignUpScreen(
                     pressedElevation = 0.dp
                 )
             ) {
-                Text(
-                    text = "Create Account",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                 if (uiState is AuthUiState.Loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text = "Create Account",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
             }
             
             Row(
@@ -279,6 +328,11 @@ fun AuthGlassInput(
 @Composable
 fun SignUpScreenPreview() {
     QuoteVaultTheme {
-        SignUpScreen(onSignUpClick = { _, _ -> }, onBackClick = {}, onSignInClick = {})
+        SignUpScreen(
+            uiState = AuthUiState.Idle,
+            onSignUpClick = { _, _, _ -> },
+            onBackClick = {},
+            onSignInClick = {}
+        )
     }
 }

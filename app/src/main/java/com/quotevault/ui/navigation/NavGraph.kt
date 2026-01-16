@@ -146,6 +146,7 @@ fun QuoteVaultNavGraph(
                             is AuthUiState.Loading -> null
                             is AuthUiState.Error -> false
                             is AuthUiState.PasswordResetSent -> false
+                            is AuthUiState.SignUpSuccess -> false
                         },
                         onNavigateToHome = {
                             navController.navigate(Screen.Home.route) {
@@ -161,20 +162,25 @@ fun QuoteVaultNavGraph(
                 }
 
                 // Auth Routes
-                composable("login") {
+                composable(
+                    route = "login?verify={verify}",
+                    arguments = listOf(navArgument("verify") { defaultValue = false; type = NavType.BoolType })
+                ) { backStackEntry ->
                     val authViewModel: AuthViewModel = hiltViewModel()
                     val authUiState by authViewModel.uiState.collectAsState()
+                    val showVerify = backStackEntry.arguments?.getBoolean("verify") ?: false
                     
                     // Navigate on successful login
                     LaunchedEffect(authUiState) {
                         if (authUiState is AuthUiState.Success) {
                             navController.navigate(Screen.Home.route) {
-                                popUpTo("login") { inclusive = true }
+                                popUpTo("login?verify={verify}") { inclusive = true }
                             }
                         }
                     }
                     
                     LoginScreen(
+                        uiState = authUiState,
                         onLoginClick = { email, password ->
                             authViewModel.signIn(email, password)
                         },
@@ -183,16 +189,28 @@ fun QuoteVaultNavGraph(
                         },
                         onResetPasswordClick = { email ->
                              authViewModel.resetPassword(email)
-                        }
+                        },
+                        showVerificationMessage = showVerify
                     )
                 }
 
                 composable("signup") {
-                    SignUpScreen(
-                        onSignUpClick = { _, _ ->
-                            navController.navigate(Screen.Home.route) {
+                    val authViewModel: AuthViewModel = hiltViewModel()
+                    val authUiState by authViewModel.uiState.collectAsState()
+
+                    // Navigate on successful signup
+                    LaunchedEffect(authUiState) {
+                        if (authUiState is AuthUiState.SignUpSuccess) {
+                            navController.navigate("login?verify=true") {
                                 popUpTo("signup") { inclusive = true }
                             }
+                        }
+                    }
+
+                    SignUpScreen(
+                        uiState = authUiState,
+                        onSignUpClick = { email, password, fullName ->
+                            authViewModel.signUp(email, password, fullName)
                         },
                         onBackClick = { navController.popBackStack() },
                         onSignInClick = { navController.popBackStack() }

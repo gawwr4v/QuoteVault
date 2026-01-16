@@ -26,6 +26,60 @@ QuoteVault is a modern Android application for discovering, saving, and sharing 
 
 ## 📱 Screenshots
 <!-- Add your screenshots here -->
+
+### 🎨 Theme Screen Showcase
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9e09edbf-3d13-4765-a55e-75ab5b144dda" width="300" style="margin-right: 24px;" />
+  <img src="https://github.com/user-attachments/assets/bb5ac43e-73d5-453a-8b87-053dee322eb9" width="300" />
+</p>
+<p align="center"><b>Light Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Dark Theme</b></p>
+
+<br />
+
+---
+
+### 📌 Radial Menu – Showcase
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e0f5b00c-5da1-450c-a619-52056549cacb" width="300" style="margin-right: 24px;" />
+  <img src="https://github.com/user-attachments/assets/42bc837a-774e-4e50-a4fa-7244097c5b2a" width="300" />
+</p>
+<p align="center"><b>Black Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Light Theme</b></p>
+
+<br />
+
+---
+
+### ❤️ Radial Menu – Like a Quote
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9435ab21-83e4-4a78-b526-70859f3f6321" width="300" style="margin-right: 24px;" />
+  <img src="https://github.com/user-attachments/assets/91262517-e35d-44b1-a1b6-9dd198f5ce37" width="300" />
+</p>
+<p align="center"><b>Black Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Light Theme</b></p>
+
+<br />
+
+---
+
+### 🔄 Radial Menu – Share a Quote
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5250e5f3-6804-43c5-a1b1-df2eb4342f8a" width="300" style="margin-right: 240px;" />
+  <img src="https://github.com/user-attachments/assets/48e7f331-77ef-4f51-9f7a-3bb9899ece8a" width="300" />
+</p>
+<p align="center"><b>Black Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Light Theme</b></p>
+
+<br />
+
+---
+
+### 💾 Radial Menu – Save a Quote to Collections
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8109630c-464b-4cf8-b6a9-a286c57bb1a4" width="300" style="margin-right: 24px;" />
+  <img src="https://github.com/user-attachments/assets/e6815cbe-af01-4352-a6b3-ddd04c83ddec" width="300" />
+</p>
+<p align="center"><b>Black Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Light Theme</b></p>
+
+
+
 <!-- <img src="screenshots/home.png" width="250" /> -->
 
 ## 🛠 Setup Instructions
@@ -150,9 +204,9 @@ Seed your database with 100+ quotes across categories. You can use any public qu
 ### Modern Android Development (MAD)
 - **MVVM**: Clear separation between UI and business logic
 - **Clean Architecture**: Three distinct layers:
-  - **Data Layer**: Repositories, Supabase Data Source, DataStore
-  - **Domain Layer**: Use cases and data models
-  - **UI Layer**: Jetpack Compose screens and ViewModels
+    - **Data Layer**: Repositories, Supabase Data Source, DataStore
+    - **Domain Layer**: Use cases and data models
+    - **UI Layer**: Jetpack Compose screens and ViewModels
 - **Dependency Injection**: Hilt (Dagger)
 
 ### Project Structure
@@ -190,11 +244,13 @@ app/src/main/java/com/quotevault/
 - `SCHEDULE_EXACT_ALARM` - Precise notification scheduling
 
 ## 🤖 AI Assistance
-built with the assistance of **Google Antigravity**.
+- **Google Stitch**: UI research and prototyping
+
 
 ## ⚠️ Known Limitations
 - **Offline Mode**: App requires internet for initial data load
 - **Widget Sync**: Updates via WorkManager or immediately on app launch
 
 ## 📄 License
-MIT License - See [LICENSE](LICENSE) for details.
+This project is licensed under the [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) License.
+

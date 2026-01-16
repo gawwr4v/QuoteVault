@@ -97,6 +97,9 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
+    // Security
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 

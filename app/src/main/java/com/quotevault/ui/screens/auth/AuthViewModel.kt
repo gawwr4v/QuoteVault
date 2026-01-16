@@ -15,7 +15,7 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
+    private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Loading)
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
     init {
@@ -58,7 +58,8 @@ class AuthViewModel @Inject constructor(
             _uiState.value = AuthUiState.Loading
             val result = authRepository.signUp(email, password, fullName)
             if (result.isSuccess) {
-                _uiState.value = AuthUiState.Success
+                authRepository.signOut() // Ensure no auto-login session persists
+                _uiState.value = AuthUiState.SignUpSuccess
             } else {
                 _uiState.value = AuthUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
             }
@@ -82,6 +83,7 @@ sealed class AuthUiState {
     object Idle : AuthUiState()
     object Loading : AuthUiState()
     object Success : AuthUiState()
+    object SignUpSuccess : AuthUiState()
     object PasswordResetSent : AuthUiState()
     data class Error(val message: String) : AuthUiState()
 }
