@@ -29,11 +29,11 @@ QuoteVault is a modern Android application for discovering, saving, and sharing 
 
 ### 🎨 Theme Screen Showcase
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/dd885d2f-6410-4ede-ad54-6e2ae51231dd" width="300" style="margin-right: 24px;" />
-  <img src="https://github.com/user-attachments/assets/1e874244-7d3f-4dd7-8b18-f4b898a24490" width="300" />
+  <img src="https://github.com/user-attachments/assets/1e874244-7d3f-4dd7-8b18-f4b898a24490" width="300" style="margin-right: 24px;" />
+  <img src="https://github.com/user-attachments/assets/dd885d2f-6410-4ede-ad54-6e2ae51231dd" width="300" />
 
 </p>
-<p align="center"><b>Light Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Dark Theme</b></p>
+<p align="center"><b>Dark Theme</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Light Theme</b></p>
 
 <br />
 
