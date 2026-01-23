@@ -250,7 +250,12 @@ app/src/main/java/com/quotevault/
 ## ⚠️ Known Limitations
 - **Offline Mode**: App requires internet for initial data load
 - **Widget Sync**: Updates via WorkManager or immediately on app launch
-
 ## 📄 License
-This project is licensed under the [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) License.
+
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.  
+See the [LICENSE](./LICENSE) file for details.
+
+> **Network Use Clause:**  
+> If you run a modified version of this software as a network service, you must make the complete source code available to users, as required by the AGPL-3.0.
+
 
