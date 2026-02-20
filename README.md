@@ -250,7 +250,7 @@ app/src/main/java/com/quotevault/
 ## ⚠️ Known Limitations
 - **Offline Mode**: App requires internet for initial data load
 - **Widget Sync**: Updates via WorkManager or immediately on app launch
-- **Auth Rate Limits (Development)**: On Supabase's free tier, email delivery (signups/password resets) is strictly rate-limited to **2 emails per hour** to prevent spam. For testing, it is recommended to use the Supabase dashboard to manually verify users or use a custom SMTP provider (like Resend) instead of the default Supabase email service.
+- **Auth Rate Limits (Development)**: On Supabase's free tier, email delivery (signups/password resets) is strictly rate-limited to **2 emails per hour** to prevent spam.
 ## 📄 License
 
 This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.  
