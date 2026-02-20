@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,12 +10,27 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+fun getLocalProperty(key: String): String {
+    val properties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        try {
+            FileInputStream(localPropertiesFile).use { inputStream ->
+                properties.load(inputStream)
+            }
+        } catch (e: Exception) {
+            // Handle exceptions as needed
+        }
+    }
+    return properties.getProperty(key, "")
+}
+
 android {
     namespace = "com.quotevault"
     compileSdk = 36
 
-    val supabaseUrl = project.findProperty("SUPABASE_URL") as? String ?: ""
-    val supabaseKey = project.findProperty("SUPABASE_KEY") as? String ?: ""
+    val supabaseUrl = getLocalProperty("SUPABASE_URL")
+    val supabaseKey = getLocalProperty("SUPABASE_KEY")
 
     defaultConfig {
         applicationId = "com.quotevault"
@@ -50,10 +68,7 @@ android {
 }
 
 // Add this at the top level or within android block if using AGP 8.1+ but standard is top level for pure kotlin, or inside extensions.
-// For Android, usually we set the compileOptions above, but to force the DAEMON to use a specific version, we usually need to configure the project toolchain.
-// However, the daemon *starts* with the system JDK.
-// If the daemon crashes immediately, toolchain might not help unless we run with `-Porg.gradle.java.home`.
-// But let's try configuring `java` toolchain.
+
 
 java {
     toolchain {
