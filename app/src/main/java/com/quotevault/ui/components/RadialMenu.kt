@@ -1,3 +1,19 @@
+/**
+ * RadialMenu
+ * 
+ * A custom, drag-to-select radial menu component built entirely in Jetpack Compose.
+ * Features dynamic angle calculation to prevent edge clipping, gesture tracking, 
+ * and continuous physics-based selection.
+ * 
+ * Designed and originally developed by @gawwr4v (https://github.com/gawwr4v).
+ * If you use or adapt this complex component in your own projects, a credit or 
+ * mention would be greatly appreciated! :)
+ *
+ */
+
+
+
+
 package com.quotevault.ui.components
 
 import android.os.Build
